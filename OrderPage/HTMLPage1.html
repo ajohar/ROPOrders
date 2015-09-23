@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <title>ROP Order Page</title>
+    <script language=javascript>
+    <!--//
+
+    function dm(amount) 
+    {
+      string = "" + amount;
+      dec = string.length - string.indexOf('.');
+      if (string.indexOf('.') == -1)
+      return string + '.00';
+      if (dec == 1)
+      return string + '00';
+      if (dec == 2)
+      return string + '0';
+      if (dec > 3)
+      return string.substring(0,string.length-dec+3);
+      return string;
+    }
+
+
+
+    function calculate()
+    {
+
+      QtyNV = 0;  QtyV = 0;
+      TotNV = 0;  TotV = 0;
+
+      PrcNV = 10.99; PrcV = 10.99;
+      TaxFactored = 1.095;
+
+      document.ofrm.Tax.value = "9.5%"
+ 
+      if (document.ofrm.qtyNV.value > "")
+         { QtyNV = document.ofrm.qtyNV.value };
+      document.ofrm.qtyNV.value = eval(QtyNV);  
+ 
+      if (document.ofrm.qtyV.value > "")
+         { QtyV = document.ofrm.qtyV.value };
+      document.ofrm.qtyV.value = eval(QtyV);  
+ 
+      TotNV = QtyNV * PrcNV;
+      document.ofrm.totalNV.value = dm(eval(TotNV));
+ 
+      TotV = QtyV * PrcV;
+      document.ofrm.totalV.value = dm(eval(TotV));
+ 
+ 
+      Totamt = eval(TotNV) + eval(TotV) ;
+    
+      //document.ofrm.Name.value = dm(eval(Totamt));
+      //alert("here");
+      document.ofrm.Total.value = dm(eval(Totamt));
+
+      document.ofrm.GrandTotal.value = dm(eval(Totamt * TaxFactored));  
+    } 
+
+
+    function validNum(theForm)
+    {
+      var checkOK = "0123456789.,";
+      var checkStr = theForm.qtyA.value;
+      var allValid = true;
+      var validGroups = true;
+      var decPoints = 0;
+      var allNum = "";
+      for (i = 0;  i < checkStr.length;  i++)
+      {
+        ch = checkStr.charAt(i);
+        for (j = 0;  j < checkOK.length;  j++)
+          if (ch == checkOK.charAt(j))
+            break;
+        if (j == checkOK.length)
+        {
+          allValid = false;
+          break;
+        }
+        if (ch == ".")
+        {
+          allNum += ".";
+          decPoints++;
+        }
+        else if (ch == "," && decPoints != 0)
+        {
+          validGroups = false;
+          break;
+        }
+        else if (ch != ",")
+          allNum += ch;
+      }
+      if (!allValid)
+      {
+        alert("Please enter only digit characters in the \"Class A quantity\" field.");
+        theForm.qtyA.focus();
+        return (false);
+      }
+
+      if (decPoints > 1 || !validGroups)
+      {
+        alert("Please enter a valid number in the \"Class A quantity\" field.");
+        theForm.qtyA.focus();
+        return (false);
+      }
+
+      var checkOK = "0123456789.,";
+      var checkStr = theForm.qtyB.value;
+      var allValid = true;
+      var validGroups = true;
+      var decPoints = 0;
+      var allNum = "";
+      for (i = 0;  i < checkStr.length;  i++)
+      {
+        ch = checkStr.charAt(i);
+        for (j = 0;  j < checkOK.length;  j++)
+          if (ch == checkOK.charAt(j))
+            break;
+        if (j == checkOK.length)
+        {
+          allValid = false;
+          break;
+        }
+        if (ch == ".")
+        {
+          allNum += ".";
+          decPoints++;
+        }
+        else if (ch == "," && decPoints != 0)
+        {
+          validGroups = false;
+          break;
+        }
+        else if (ch != ",")
+          allNum += ch;
+      }
+      if (!allValid)
+      {
+        alert("Please enter only digit characters in the \"Class B quantity\" field.");
+        theForm.qtyB.focus();
+        return (false);
+      }
+
+      if (decPoints > 1 || !validGroups)
+      {
+        alert("Please enter a valid number in the \"Class B quantity\" field.");
+        theForm.qtyA.focus();
+        return (false);
+      }
+
+      var checkOK = "0123456789.,";
+      var checkStr = theForm.qtyC.value;
+      var allValid = true;
+      var validGroups = true;
+      var decPoints = 0;
+      var allNum = "";
+      for (i = 0;  i < checkStr.length;  i++)
+      {
+        ch = checkStr.charAt(i);
+        for (j = 0;  j < checkOK.length;  j++)
+          if (ch == checkOK.charAt(j))
+            break;
+        if (j == checkOK.length)
+        {
+          allValid = false;
+          break;
+        }
+        if (ch == ".")
+        {
+          allNum += ".";
+          decPoints++;
+        }
+        else if (ch == "," && decPoints != 0)
+        {
+          validGroups = false;
+          break;
+        }
+        else if (ch != ",")
+          allNum += ch;
+      }
+      if (!allValid)
+      {
+        alert("Please enter only digit characters in the \"Class C quantity\" field.");
+        theForm.qtyC.focus();
+        return (false);
+      }
+
+      if (decPoints > 1 || !validGroups)
+      {
+        alert("Please enter a valid number in the \"Class C quantity\" field.");
+        theForm.qtyC.focus();
+        return (false);
+      }
+
+
+      calculate();
+      return (true);
+    } 
+
+
+    //-->
+    </script>
+
+    <script>
+    window.webtrendsAsyncInit=function(){
+        var dcs=new Webtrends.dcs().init({
+            dcsid:"dcs37pv2c00000oun93vypyva_4k6d",
+            domain:"www.qsstats.com",
+            timezone:-8,
+            i18n:true,
+            onsitedoms:"htmlgoodies.com",
+            fpcdom:".htmlgoodies.com",
+            plugins:{
+                //hm:{src:"//s.webtrends.com/js/webtrends.hm.js"}
+            }
+            }).track();
+    };
+    (function(){
+        var s=document.createElement("script"); s.async=true; s.src="/imageserver/common/v10/webtrends.min.js";    
+        var s2=document.getElementsByTagName("script")[0]; s2.parentNode.insertBefore(s,s2);
+    }());
+    </script>
+    <noscript><img alt="dcsimg" id="dcsimg" width="1" height="1" src="//www.qsstats.com/dcs37pv2c00000oun93vypyva_4k6d/njs.gif?dcsuri=/legacy/beyond/webmaster/projects/7withval2.html&amp;WT.js=No&amp;WT.tv=10.4.1&amp;dcssip=www.htmlgoodies.com&amp;WT.qs_dlk=VgHmlgrIZ7gAAH3q5@IAAAAH&"/></noscript>
+
+</head>
+<body bgcolor="#FFFFCC">
+
+    <h2>Roll OK Please</h2>
+    <h3>Order Here!</h3>
+    <p>Please make your selections from the following choices:</p>
+    <p>&nbsp;</p>
+    
+    <form method="POST" action="submitted.html" name="ofrm">
+    <p>Please tell us who you are (<font color="#FF0000">red</font> denotes required information):</p>
+        <table border="0" cellpadding="0" width="650" id="table1">
+            <tr>
+                <td width="340" align="right"><font color="#FF0000">Name</font>:</td>
+                <td width="10">&nbsp;</td>
+                <td width="200"><input type="text" name="Name" size="30" tabindex="1"></td>
+            </tr>
+            <tr>
+                <td width="340" align="right"><font color="#FF0000">Email</font> (Your confirmation will be sent here): </td>
+                <td width="10">&nbsp;</td>
+                <td width="200"><input type="text" name="Email" size="30" tabindex="1"></td>
+            </tr>
+            <tr>
+                <td width="340" align="right"><font color="#FF0000">Phone</font>:</td>
+                <td width="10">&nbsp;</td>
+                <td width="200"><input type="text" name="Phone" size="30" tabindex="1"></td>
+            </tr>
+            <tr>
+                <td width="340" align="right"><font color="#FF0000">Building</font> (Delivery to the receptionist desk here): </td>
+                <td width="10">&nbsp;</td>
+                <td width="200"><select size="1" name="Building" tabindex="1">
+                    <option value="Blank"></option>
+                    <option value="40">40</option>
+                    <option value="41">41</option>
+                    <option value="42">42</option>
+                    <option value="43">43</option>
+                    <option value="44">44</option>
+                    <option value="STUDIO E">STUDIO E</option>
+                    <option value="STUDIO F">STUDIO F</option>
+                    <option value="STUDIO G">STUDIO G</option>
+                    <option value="STUDIO H">STUDIO H</option>
+                    <option value="CITY CENTER">CITY CENTER</option>
+                </select></td>                
+            </tr>
+            <tr>
+                <td width="340" align="right">&nbsp;</td>
+                <td width="10">&nbsp;</td>
+                <td width="200">&nbsp;</td>
+            </tr>
+        </table>
+
+        <p>And tell us what you would like:</p>
+        <table border="0" cellpadding="0" width="550" id="table2">
+            <tr>
+                <td width="250" height="31"><b>Item Description</b></td>
+                <td align="center" width="100" height="31"><b>Quantity</b></td>
+                <td align="right" height="31" width="60"><b>Price </b></td>
+                <td align="right" height="31" width="140"><b>Total</b></td>
+            </tr>
+            <tr>
+                <td width="250">Non Veg Meal</td>
+                <td align="center" width="100">
+                    <input type="text" name="qtyNV" size="5" tabindex="5" onchange="calculate()">
+                </td>
+                <td align="right" width="60">10.99</td>
+                <td align="right" width="140">
+                    <input type="text" name="totalNV" size="12" tabindex="99" onchange="calculate()">
+                </td>
+            </tr>
+            <tr>
+                <td width="250">Veg Meal</td>
+                <td align="center" width="100">
+                    <input type="text" name="qtyV" size="5" tabindex="5" onchange="calculate()">
+                </td>
+                <td align="right" width="60">10.99</td>
+                <td align="right" width="140">
+                    <input type="text" name="totalV" size="12" tabindex="99" onchange="calculate()">
+                </td>
+            </tr>
+            <tr>
+                <td width="250">&nbsp;</td>
+                <td align="center" width="100">&nbsp;</td>
+                <td align="right" width="60">&nbsp;</td>
+                <td align="right" width="140">&nbsp;</td>
+            </tr>
+            <tr>
+                <td width="250">
+                <p align="right"><b>TOTAL:</b></td>
+                <td align="center" width="100">&nbsp;</td>
+                <td align="right" width="60">&nbsp;</td>
+                <td align="right" width="140">
+                <input type="text" name="Total" size="15" tabindex="99" onchange="calculate()"></td>
+            </tr>
+            <tr>
+                <td width="250">
+                <p align="right"><b>TAX:</b></td>
+                <td align="center" width="100">&nbsp;</td>
+                <td align="right" width="60">&nbsp;</td>
+                <td align="right" width="140">
+                <input type="text" name="Tax" size="15" tabindex="99" onchange="calculate()" value="9.5%"></td>
+            </tr>            
+            <tr>
+                <td width="250">
+                <p align="right"><b>GRAND TOTAL:</b></td>
+                <td align="center" width="100">&nbsp;</td>
+                <td align="right" width="60">&nbsp;</td>
+                <td align="right" width="140">
+                <input type="text" name="GrandTotal" size="15" tabindex="99" onchange="calculate()"></td>
+            </tr>            
+    </table>
+
+    <p>&nbsp;</p>
+    <table border="0" cellpadding="0" width="550" id="table3">
+        <tr>
+            <td width="563">
+            <p align="center">
+            <input type="submit" value="Submit" name="subButton" tabindex="50">&nbsp;&nbsp;&nbsp;&nbsp; 
+            <input type="reset" value="Reset" name="resetButton" tabindex="50"></td>
+        </tr>
+    </table>
+    </form>
+
+</body>
+</html>
